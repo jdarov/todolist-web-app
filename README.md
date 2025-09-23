@@ -18,34 +18,56 @@ A Flask web application with PostgreSQL persistence, built to manage task lists 
 ---
 
 ## Quick Start
+
+### Option A, use existing virtual environment
+If this repo already includes a `.venv` folder with an environment named `webdev`, you can activate it directly.
+
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/Todo-List-Web-App.git
-cd Todo-List-Web-App
+# macOS or Linux
+source .venv/webdev/bin/activate
 
-# Create and activate a virtual environment
-python3 -m venv .venv
-source .venv/bin/activate    # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create the database (PostgreSQL)
-createdb todo_list_web_app
-
-# Initialize schema
-psql -d todo_list_web_app -f schema.sql
+# Windows PowerShell
+.venv\webdev\Scripts\Activate.ps1
 
 # Set environment variables
 export FLASK_APP=app.py
 export FLASK_ENV=development
-export DATABASE_URL="postgresql://username:password@localhost/todo_list_web_app"
-# On Windows (PowerShell):
-# $env:FLASK_APP="app.py"; $env:FLASK_ENV="development"; $env:DATABASE_URL="postgresql://username:password@localhost/todo_list_web_app"
+export DATABASE_URL="postgresql://username:password@localhost/todos"
+# On Windows PowerShell:
+# $env:FLASK_APP="app.py"; $env:FLASK_ENV="development"; $env:DATABASE_URL="postgresql://username:password@localhost/todos"
+
+# Create the database, then initialize schema
+createdb todos
+psql -d todos -f schema.sql
 
 # Run the app
 flask run
 ```
+
+### Option B, use Poetry for dependency management
+If you prefer Poetry, or you do not have the `webdev` venv, set up Poetry and install deps.
+
+```bash
+# Install Poetry if needed
+# Recommended, pipx
+pipx install poetry
+# Alternative
+pip install --user poetry
+
+# Install project dependencies
+poetry install
+
+# Create the database, then initialize schema
+createdb todos
+psql -d todos -f schema.sql
+
+# Run the app via Poetry
+poetry run flask run
+```
+
+> Notes
+> - This project uses Flask and psycopg2. If you use Option A, those should already be installed in `webdev`. If not, install them with Poetry: `poetry add flask psycopg2-binary`.
+> - If you are not using `DATABASE_URL`, update your app configuration accordingly.
 
 ---
 
@@ -62,6 +84,7 @@ flask run
 - [Flask](https://flask.palletsprojects.com/) , Web framework  
 - [PostgreSQL](https://www.postgresql.org/) , Relational database  
 - [psycopg2](https://www.psycopg.org/) , PostgreSQL adapter for Python  
+- [Poetry](https://python-poetry.org/) , Dependency and environment management  
 - [HTML/CSS](https://developer.mozilla.org/en-US/docs/Web/HTML) , Frontend structure and styling  
 
 ---
@@ -91,15 +114,10 @@ You can optionally use a `.env` file and a loader like `python-dotenv`.
 ```env
 FLASK_APP=app.py
 FLASK_ENV=development
-DATABASE_URL=postgresql://username:password@localhost/todo_list_web_app
+DATABASE_URL=postgresql://username:password@localhost/todos
 ```
 
-Minimal `requirements.txt`:
-```txt
-Flask>=3.0.0
-psycopg2-binary>=2.9.0
-python-dotenv>=1.0.0
-```
+If you are using Poetry, you can set environment variables per shell session with `poetry run`, or export them in your shell as shown in Quick Start.
 
 ---
 
