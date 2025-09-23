@@ -1,3 +1,4 @@
+
 def error_for_list_title(title, lists):
     if any(lst['title'] == title for lst in lists):
         return "The title must be unique."
@@ -30,3 +31,6 @@ def sort_items(items, select_completed):
                       if select_completed(item)]
 
     return incomplete_items + complete_items
+
+def todos_remaining(lst):
+    return sum(1 for todo in lst['todos'] if not todo['completed'])
